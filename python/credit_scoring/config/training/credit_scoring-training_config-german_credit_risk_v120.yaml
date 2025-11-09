@@ -1,0 +1,78 @@
+version: 1.0.0
+
+project_info:
+  benchmark_id: credit_scoring-training_config-germain_credit_risk_v1.0.0
+  description: Entrenamiento de MLP para puntaje crediticio.
+
+environment: venv
+
+data_source:
+  dataset_name: genia_services_csv_german_credit_risk_v1.0.0_training_5k_20250824
+  data_path:
+    dataset_path: ../../datasets/genia_services_csv_german_credit_risk_v1.0.0_training_20250825/german_credit_risk.csv
+    artifact_path: "model"
+    preprocessor_filename: "german_credit_risk_preprocessor.joblib"
+  version_tag: v1
+
+preprocessing_params: N/A
+
+model_config:
+  model_name: "genia_services_mlp_credit_scoring_model_v1.2.0_20250824.pt"
+  model_version: "v1.0.0"
+
+  architecture:
+    hidden_layers: [128, 64, 64]
+    use_batch_norm: true
+    activation_fn: "ReLU"
+    dropout_rate: 0.2
+    
+  classes:
+    - "good"
+    - "bad"
+
+training_params:
+  test_size: 0.2
+  random_state: 42
+  epochs: 100
+  batch_size: 32
+
+  optimizer:
+    name: "Adam"
+    learning_rate: 0.001
+    weight_decay: 0.0001
+  
+  loss_function:
+    use_pos_weight: false
+
+  scheduler:
+    name: "ReduceLROnPlateau"
+    patience: 5
+    factor: 0.5
+
+  early_stopping:
+    patience: 10
+    delta: 0.001
+
+evaluation_params:
+  batch_size: 1
+  metrics:
+    - accuracy
+    - recall
+    - f1_score
+    - specificity
+    - precision
+  timing_metrics:
+    - average_inference_time
+    - average_processing_time
+    - total_benchmark_time
+
+  save_predictions: False
+  save_failed_cases: True
+
+mlflow_config:
+  mlflow_project_name: "credit_scoring"
+  mlflow_run_name_prefix: "credit_scoring-training_config-german_credit_risk_v120"
+  mlflow_tags: ["credit_scoring", "mlp", "training"]
+
+
+benchmark_specific: N/A
