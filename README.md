@@ -1,195 +1,99 @@
-# 🚀 Guía de Despliegue Automatizado con Cloud Build y Cloud Run
+# 🚀 Deep Learning Services: De la Teoría a Producción
 
-Este documento detalla el proceso de configuración de un pipeline de Integración Continua y Despliegue Continuo (CI/CD) para los microservicios de este repositorio, utilizando herramientas de Google Cloud Platform.
-El objetivo es automatizar completamente el proceso desde que un desarrollador envía código a GitHub hasta que los servicios están actualizados y corriendo en Cloud Run.
+[![Ingeniia Platform](https://img.shields.io/badge/Plataforma-Ingeniia.co-blue?style=for-the-badge&logo=google-chrome)](https://www.ingeniia.co)
+[![Made in Colombia](https://img.shields.io/badge/Talento-100%25_Colombiano-yellow?style=for-the-badge)](https://www.ingeniia.co)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)]()
 
-## 🎯 Arquitectura del Pipeline
+Bienvenido al repositorio oficial de microservicios del **Curso de Deep Learning** de [inGeniia.co](https://www.ingeniia.co).
 
-El flujo de trabajo es el siguiente:
+Este no es otro repositorio de "Jupyter Notebooks muertos". Aquí encontrarás **ingeniería de verdad**: código estructurado, dockerizado y listo para desplegarse en la nube (GCP). Nuestra misión es democratizar el acceso a la Inteligencia Artificial de alta calidad, desarrollada con **talento 100% Colombiano 🇨🇴** para el mundo.
 
-- [Push a GitHub] ➔ Stage envía cambios a la rama main.
+---
 
-- [Disparador de Cloud Build] ➔ El push activa un disparador configurado en GCP.
+## 📂 Estructura del Proyecto
 
-- [Ejecución de cloudbuild.yaml] ➔ Cloud Build ejecuta las instrucciones definidas en el archivo cloudbuild.yaml.
+Hemos diseñado una arquitectura profesional para que encuentres fácilmente lo que necesitas. Olvida el código espagueti; esto es MLOps.
 
-- Construcción: Se construyen las imágenes Docker para cada microservicio.
-
-- Envío: Las imágenes se suben y versionan en Artifact Registry.
-
-- Despliegue: Se le ordena a Cloud Run que se actualice con las nuevas imágenes.
-
-- [Servicios Activos en Cloud Run] ➔ Los microservicios se actualizan y están listos para recibir tráfico.
-
-## 🏁 Guía de Configuración Inicial (Desde Cero)
-
-Esta guía asume que se está configurando el entorno por primera vez.
-
-### 1. Crear la Infraestructura Base en GCP 🏗️
-
-Primero, creamos los contenedores y las identidades que usaremos.
-
-- Crear el Repositorio de Artefactos: Aquí es donde guardaremos nuestras imágenes Docker.
-
-    ```bash
-    gcloud artifacts repositories create ingeniia-services \
-    --repository-format=docker \
-    --location=us-central1 \
-    --description="Repositorio para microservicios"
-    ```
-
--  Crear las Cuentas de Servicio: Necesitamos tres identidades distintas para diferentes roles.
-    - El Constructor `github-actions-deployer`: La cuenta que Cloud Build usará para ejecutar todo el pipeline.
-
-        ```bash
-        gcloud iam service-accounts create github-actions-deployer \
-        --display-name="Service Account for Cloud Build CI/CD"
-        ```
-    - Las Aplicaciones `credit-scoring-sa` y `content-service-sa`: Las identidades que tendrán los servicios una vez que estén corriendo en Cloud Run.
-        ```bash
-        gcloud iam service-accounts create credit-scoring-sa \
-        --display-name="Service Account for Credit Scoring Service"
-
-        gcloud iam service-accounts create content-service-sa \
-        --display-name="Service Account for Content Service"
-        ```
-### 2. Configuración de Permisos (IAM) 🔑
-
-Esta es la parte más crítica. Cada "actor" en nuestro proceso necesita permisos específicos para hacer su trabajo y nada más (principio de menor privilegio).
-
-- A. Permisos para el Constructor `github-actions-deployer`.
-
-    Esta cuenta es la que orquesta todo, por lo que necesita varios permisos:
-    - Para subir imágenes a Artifact Registry `roles/artifactregistry.writer`:
-
-        ```bash
-        gcloud projects add-iam-policy-binding ingeniiaservices \
-        --member="serviceAccount:github-actions-deployer@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/artifactregistry.writer"
-        ```
-    - Para desplegar y administrar servicios en Cloud Run `roles/run.admin`:
-
-        ```bash
-        gcloud projects add-iam-policy-binding ingeniiaservices \
-        --member="serviceAccount:github-actions-deployer@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/run.admin"
-        ```
-    - Para escribir los registros de la compilación en Cloud Logging `roles/logging.logWriter`:
-
-        ```bash
-        gcloud projects add-iam-policy-binding ingeniiaservices \
-        --member="serviceAccount:github-actions-deployer@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/logging.logWriter"
-        ```
-    
-    - Para poder asignar las otras cuentas de servicio a los servicios de Cloud Run `roles/iam.serviceAccountUser`:
-
-        ```bash
-        # Permiso para usar credit-scoring-sa
-        gcloud iam service-accounts add-iam-policy-binding \
-        credit-scoring-sa@ingeniiaservices.iam.gserviceaccount.com \
-        --member="serviceAccount:github-actions-deployer@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/iam.serviceAccountUser"
-
-        # Permiso para usar content-service-sa
-        gcloud iam service-accounts add-iam-policy-binding \
-        content-service-sa@ingeniiaservices.iam.gserviceaccount.com \
-        --member="serviceAccount:github-actions-deployer@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/iam.serviceAccountUser"
-        ```
-
-- B. Permisos para las Aplicaciones `credit-scoring-sa` y `content-service-sa`.
-
-    Estas cuentas solo necesitan un permiso: poder leer (descargar) su propia imagen de contenedor desde Artifact Registry cuando Cloud Run las inicia.
-    - Permiso de lectura sobre el repositorio específico:
-
-        ```bash
-        gcloud artifacts repositories add-iam-policy-binding ingeniia-services \
-        --location=us-central1 \
-        --member="serviceAccount:credit-scoring-sa@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/artifactregistry.reader"
-
-        gcloud artifacts repositories add-iam-policy-binding ingeniia-services \
-        --location=us-central1 \
-        --member="serviceAccount:content-service-sa@ingeniiaservices.iam.gserviceaccount.com" \
-        --role="roles/artifactregistry.reader"
-        ```
-
-### 3. Adaptación de los Contenedores para Cloud Run 🐳
-
-Para que un contenedor funcione en Cloud Run, debe cumplir dos contratos:
-
-1. El Contrato de Puerto: El contenedor debe escuchar en el puerto que Cloud Run le proporciona a través de la variable de entorno `$PORT` (usualmente 8080).
-    - *Acción:* Modificamos la última línea CMD en ambos Dockerfile (en container-images/) para usar `$PORT` en lugar de un puerto fijo.
-    - *Linea final:* `CMD uvicorn src.server.app:app --host 0.0.0.0 --port $PORT`
-2. El Contrato de Recursos: El contenedor debe operar dentro de los límites de memoria y CPU asignados.
-    - *Problema:* Nuestros servicios de ML (credit-scoring-service) usan librerías pesadas como torch y pandas, que exceden el límite de memoria por defecto de Cloud Run (512 MiB).
-    - *Acción:*En el `cloudbuild.yaml`, añadimos el flag `--memory=1Gi` al comando de despliegue para aumentar la memoria asignada.
-
-### 4. El Orquestador `cloudbuild.yaml` 📜
-Este archivo es el corazón del pipeline. Le dice a Cloud Build qué hacer, paso a paso.
-
-```yaml
-steps:
-# Paso 1: Construir la imagen para credit-scoring-service
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/credit-scoring-service:${SHORT_SHA}', '--file=container-images/credit_scoring/Dockerfile', '.']
-
-# Paso 2: Enviar (push) la imagen de credit-scoring-service
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/credit-scoring-service:${SHORT_SHA}']
-
-# Paso 3: Construir la imagen para content-service
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/content-service:${SHORT_SHA}', '--file=container-images/content_service/Dockerfile', '.']
-
-# Paso 4: Enviar (push) la imagen de content-service
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/content-service:${SHORT_SHA}']
-
-# Paso 5: Desplegar credit-scoring-service en Cloud Run
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-    - 'run'
-    - 'deploy'
-    - 'credit-scoring-service'
-    - '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/credit-scoring-service:${SHORT_SHA}'
-    - '--platform=managed'
-    - '--region=us-central1'
-    - '--ingress=internal'
-    - '--service-account=credit-scoring-sa@${PROJECT_ID}.iam.gserviceaccount.com'
-    - '--allow-unauthenticated'
-    - '--memory=1Gi'
-
-# Paso 6: Desplegar content-service en Cloud Run
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args:
-    - 'run'
-    - 'deploy'
-    - 'content-service'
-    - '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/content-service:${SHORT_SHA}'
-    - '--platform=managed'
-    - '--region=us-central1'
-    - '--ingress=internal'
-    - '--service-account=content-service-sa@${PROJECT_ID}.iam.gserviceaccount.com'
-    - '--allow-unauthenticated'
-    - '--memory=1Gi'
-
-options:
-  diskSizeGb: 100
-  logging: CLOUD_LOGGING_ONLY
+```text
+deep_learning_services/
+├── container-images/       # 🐳 Dockerfiles optimizados para cada microservicio.
+├── ops/                    # ☁️ IaC y Cloud Build para despliegues automáticos en GCP.
+├── python/                 # 🧠 Lógica pura (Source Code) y Endpoints (FastAPI).
+│   ├── credit_scoring/     # Servicio de predicción de riesgo crediticio (MLP).
+│   └── xray_classifier/    # Servicio de visión artificial para tórax (CNN).
+├── .dockerignore           # Buenas prácticas de construcción.
+└── README.md               # Estás aquí.
 ```
 
-### 5. Conexión con GitHub (El Disparador) 🔗
-El último paso es conectar todo con nuestro repositorio.
+## 🤖 Servicios Disponibles y Datasets
+Cada servicio en este repositorio corresponde a un módulo práctico de nuestra plataforma. Aquí tienes los enlaces directos a los datos que usamos para entrenar estos modelos:
+| Servicio / Modelo         | Tipo de Red          | Dataset (HuggingFace) 💾                                         | Descripción                                                               |
+|---------------------------|----------------------|------------------------------------------------------------------|---------------------------------------------------------------------------|
+| Credit Scoring            | MLP (Perceptrón)     | [German Credit Risk](https://huggingface.co/datasets/inGeniia/german-credit-risk_credit-scoring_mlp)     | Predicción de puntajes crediticios basada en datos tabulares.            |
+| X-Rays Evaluation     | CNN (YOLO11-cls)     | [Chest X-Rays](https://huggingface.co/datasets/inGeniia/chest-xrays_xrays-evaluation_cnn-cls)           | Clasificación de imágenes de tórax para apoyo en diagnóstico médico.     |
 
-1. Ve a la consola de Cloud Build > Activadores.
-2. Haz clic en `Crear activador`.
-3. Conecta tu repositorio de GitHub y configura el evento `ej: Enviar una rama, main`.
-4. En "Configuración", selecciona "Archivo de configuración de Cloud Build" y asegúrate de que apunte a `cloudbuild.yaml`.
-5. Paso Crítico: Haz clic en `MOSTRAR OPCIONES AVANZADAS` y en la sección `Cuenta de servicio`, selecciona la cuenta constructora que creamos: `github-actions-deployer@....` Esto le da a Cloud Build la identidad y los permisos correctos para trabajar.
-6. Crea el disparador.
+¿Quieres verlos en acción? Ve a [www.ingeniia.co](https://www.ingeniia.co) e interactúa con estos modelos desplegados en tiempo real.
 
-¡Y listo! Con esta configuración, cada `push` a `main` resultará en un despliegue automático, seguro y versionado de tus microservicios.
+## 🎓 Ruta de Aprendizaje: Tu Camino a la Maestría en IA
+En inGeniia, creemos en dar valor antes de pedir nada a cambio. Por eso, una gran parte de nuestra formación es totalmente gratuita.
+
+### 🎁 Nivel 1: Fundamentos Sólidos (GRATIS)
+Accede a estos 7 módulos sin costo y empieza tu carrera hoy mismo:
+
+- Módulo 0: Python Pro, Git, Docker y Configuración de Entorno.
+
+- Módulo 1: MLP (Tu primera red neuronal) + MLOps Básico.
+
+- Módulo 2: CNN Clasificación (Visión por Computador) + Data Augmentation.
+
+- Módulo 3: CNN Detección (Bounding Boxes, YOLO concepts).
+
+- Módulo 4: Redes Siamesas (Reconocimiento facial, Embeddings).
+
+- Módulo 5: Autoencoders (Compresión de datos y Denoising).
+
+- Módulo 6: NLP Básico (Procesamiento de Lenguaje Natural clásico).
+
+- Módulo 7: RNN & LSTM (Series de tiempo y Secuencias).
+
+
+### 🚀 Nivel 2: Maestría Profesional (PREMIUM)
+Para quienes quieren liderar la industria. Profundidad técnica, arquitecturas modernas y escalabilidad masiva:
+- Módulo 8: Segmentación Avanzada & OBB (U-Net, DeepLab).
+
+- Módulo 9 & 10: Generación de Imágenes (VAEs & GANs).
+
+- Módulo 11: Diffusion Models (La tecnología detrás de MidJourney/Stable Diffusion).
+
+- Módulo 12 & 13: Transformers & ViTs (El corazón de la IA moderna).
+
+- Módulo 14: LLMs, RAG & Agentes (Crea tus propios GPTs, Vector DBs y Agentes Autónomos).
+
+- Módulo 15: GNNs (Redes Neuronales en Grafos).
+
+- Módulo 16: Modelos Multimodales.
+
+- Módulo 17: Reinforcement Learning.
+
+- Módulo 18: IA Eficiente y Segura en Producción (Quantization, Security, Cost-Optimization).
+
+
+💡 Invierte en ti: El conocimiento en el Nivel 2 es lo que diferencia a un entusiasta de un Senior AI Engineer.
+
+## 🛠️ Guía Técnica de Despliegue (GCP)
+Para llevar estos servicios a la nube, utilizamos un pipeline de CI/CD robusto con Google Cloud Platform.
+
+### Arquitectura del Pipeline
+1. Push a GitHub ➔ Activa el disparador.
+
+2. Cloud Build ➔ Construye la imagen Docker ubicada en container-images/.
+
+3. Artifact Registry ➔ Almacena y versiona la imagen.
+
+4. Cloud Run ➔ Despliega el servicio serverless y auto-escalable.
+
+
+## ❤️ Hecho en Colombia para el mundo
+Desarrollado con pasión por el equipo de inGeniia.
+Quindío, Colombia 🇨🇴
+
