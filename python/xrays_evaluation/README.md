@@ -148,6 +148,8 @@ Este software implementa arquitecturas de Deep Learning basadas en los materiale
 
 Este proyecto utiliza código y modelos de arquitectura basados en Ultralytics YOLO, licenciado bajo la AGPL-3.0. Puedes encontrar el repositorio original en [Ultralytics](https://github.com/ultralytics/ultralytics).
 
+Para conocer los detalles y condiciones de distribución consulte el archivo [LICENCIA.](https://github.com/AprendeIngenia/deep_learning_services/blob/a01e33ae3f686225fc5e3d322b3979fc90120202/python/xrays_evaluation/LICENSE)
+
 ---
 
 **¿Te interesa aprender más?** 

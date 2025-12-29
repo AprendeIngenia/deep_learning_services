@@ -1,3 +1,21 @@
+"""
+xrays_evaluation - evaluación de radiografias con CNN.
+Copyright (C) 2025 inGeniia.co
+
+Este programa es software libre: puede redistribuirlo y/o modificarlo
+bajo los términos de la Licencia Pública General GNU Affero publicada
+por la Free Software Foundation, ya sea la versión 3 de la Licencia o
+(a su elección) cualquier versión posterior.
+
+Este programa se distribuye con la esperanza de que sea útil,
+pero SIN NINGUNA GARANTÍA; ni siquiera la garantía implícita de
+COMERCIABILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Consulte la
+Licencia Pública General GNU Affero para obtener más detalles.
+
+Debería haber recibido una copia de la Licencia Pública General GNU Affero
+junto con este programa. En caso contrario, consulte https://www.gnu.org/licenses/.
+"""
+
 import torch
 import numpy as np
 
