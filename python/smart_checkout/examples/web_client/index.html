@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Checkout – WebSocket Client (Local)</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="dot"></div>
+      <div>
+        <div class="title">Smart Checkout</div>
+        <div class="subtitle">WebSocket Client · Local</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="wsUrl" type="text" spellcheck="false"
+             value="ws://localhost:8080/ws/smart_checkout" />
+      <button id="btnConnect">Conectar</button>
+      <button id="btnDisconnect" class="secondary" disabled>Desconectar</button>
+      <button id="btnCart" class="secondary">Carrito</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="cameraPanel">
+      <div class="panelHeader">
+        <div class="panelTitle">Cámara</div>
+        <div class="status" id="status">Desconectado</div>
+      </div>
+
+      <div class="videoWrap">
+        <video id="video" autoplay playsinline muted></video>
+        <canvas id="overlay"></canvas>
+      </div>
+
+      <div class="panelFooter">
+        <div class="hint">
+          Tip: pasa el producto por el centro. El cliente envía 640×640 JPEG con calidad 0.8.
+        </div>
+
+        <div class="metrics" id="metrics">
+          <span>fps: -</span>
+          <span>lat: -</span>
+          <span>items: -</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sidePanel">
+      <div class="panelHeader">
+        <div class="panelTitle">Detecciones</div>
+        <div class="small" id="queueInfo">0 pendientes</div>
+      </div>
+
+      <div id="detectionsList" class="list"></div>
+
+      <div class="panelFooter small">
+        Reglas:
+        <ul>
+          <li>“Agregar” suma al carrito y no vuelve a molestar con ese objeto mientras esté visible.</li>
+          <li>“Descartar” ignora ese objeto hasta que desaparezca del cuadro (tracking local por IoU).</li>
+          <li>Se envía un frame nuevo solo cuando el servidor responde (drop frames).</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Drawer Carrito -->
+  <aside id="cartDrawer" class="drawer hidden">
+    <div class="drawerHeader">
+      <div>
+        <div class="panelTitle">Carrito</div>
+        <div class="small" id="cartCount">0 items</div>
+      </div>
+      <button id="btnCloseCart" class="secondary">Cerrar</button>
+    </div>
+
+    <div id="cartItems" class="cartItems"></div>
+
+    <div class="drawerFooter">
+      <div class="total">
+        <span>Total</span>
+        <strong id="cartTotal">$0.00</strong>
+      </div>
+      <button id="btnClearCart" class="danger">Vaciar carrito</button>
+    </div>
+  </aside>
+
+  <!-- ✅ Toasts -->
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="./app.js"></script>
+</body>
+</html>

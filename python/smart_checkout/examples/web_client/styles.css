@@ -1,0 +1,269 @@
+:root {
+  --bg: #0b0f17;
+  --panel: #121a27;
+  --panel2: #0f1623;
+  --text: #e7eefc;
+  --muted: #97a6c3;
+  --accent: #4ea1ff;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --bad: #ef4444;
+  --border: rgba(255,255,255,0.10);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(1200px 800px at 20% 10%, rgba(78,161,255,0.12), transparent 60%),
+              radial-gradient(900px 700px at 80% 30%, rgba(34,197,94,0.08), transparent 55%),
+              var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,14,22,0.65);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand { display: flex; gap: 10px; align-items: center; }
+.dot {
+  width: 12px; height: 12px; border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px rgba(78,161,255,0.18);
+}
+.title { font-weight: 700; letter-spacing: 0.2px; }
+.subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+.controls { display: flex; gap: 10px; align-items: center; }
+.controls input {
+  width: 360px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  outline: none;
+}
+button {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(78,161,255,0.18);
+  color: var(--text);
+  cursor: pointer;
+}
+button:hover { filter: brightness(1.08); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+button.secondary { background: rgba(255,255,255,0.06); }
+button.danger { background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.35); }
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+
+.cameraPanel, .sidePanel {
+  background: rgba(18,26,39,0.75);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.panelHeader, .panelFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(15,22,35,0.75);
+}
+.panelFooter { border-top: 1px solid var(--border); border-bottom: none; }
+
+.panelTitle { font-weight: 700; }
+.status {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.06);
+  color: var(--muted);
+}
+
+.videoWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.videoWrap video, .videoWrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hint { color: var(--muted); font-size: 12px; }
+.metrics { display: flex; gap: 14px; color: var(--muted); font-size: 12px; }
+
+.sidePanel .list {
+  padding: 10px 12px;
+  max-height: calc(100vh - 220px);
+  overflow: auto;
+}
+
+.card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 10px;
+}
+.cardTop { display: flex; justify-content: space-between; gap: 10px; }
+.cardTitle { font-weight: 700; }
+.badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.cardBody { margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+.cardActions { display: flex; gap: 10px; margin-top: 10px; }
+.cardActions button { flex: 1; }
+
+.small { font-size: 12px; color: var(--muted); }
+ul { margin: 8px 0 0 18px; padding: 0; color: var(--muted); }
+li { margin: 4px 0; }
+
+.drawer {
+  position: fixed;
+  top: 0; right: 0;
+  width: 420px;
+  height: 100%;
+  background: rgba(18,26,39,0.92);
+  border-left: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+}
+.hidden { display: none; }
+
+.drawerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(15,22,35,0.85);
+}
+
+.cartItems {
+  padding: 12px 14px;
+  overflow: auto;
+  flex: 1;
+}
+.cartRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 10px;
+}
+.cartRow strong { font-weight: 700; }
+.cartRow .muted { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.cartRow .qty {
+  display: flex; gap: 8px; align-items: center; justify-content: flex-end;
+}
+.qty button { padding: 6px 10px; border-radius: 10px; }
+
+.drawerFooter {
+  border-top: 1px solid var(--border);
+  background: rgba(15,22,35,0.85);
+  padding: 14px;
+}
+.total { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+
+/* ------------------------ */
+/* Toasts                   */
+/* ------------------------ */
+.toasts {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 30;
+  pointer-events: none; /* no bloquea clicks */
+}
+
+.toast {
+  width: min(420px, calc(100vw - 32px));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(18,26,39,0.92);
+  backdrop-filter: blur(10px);
+  padding: 10px 12px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+  transform: translateY(8px);
+  opacity: 0;
+  animation: toast-in 140ms ease-out forwards;
+}
+
+.toast .row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.toast .left {
+  display: grid;
+  gap: 2px;
+}
+
+.toast .title {
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.toast .desc {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.toast .amount {
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.toast.ok .title { color: var(--ok); }
+.toast.warn .title { color: var(--warn); }
+.toast.bad .title { color: var(--bad); }
+
+@keyframes toast-in {
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.toast.out {
+  animation: toast-out 160ms ease-in forwards;
+}
+@keyframes toast-out {
+  to { transform: translateY(8px); opacity: 0; }
+}

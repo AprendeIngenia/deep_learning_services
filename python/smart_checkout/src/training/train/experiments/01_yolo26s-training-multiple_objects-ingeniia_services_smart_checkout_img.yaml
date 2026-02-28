@@ -1,0 +1,35 @@
+version: 1.0.0
+
+project_info:
+  name: "SmartCheckout_Detection"
+  description: "Entrenamiento inicial YOLO26s para detección de productos (Cajero Automático)."
+  experiment_id: "EXP-001"
+  tags: ["detection", "yolo26", "smart-checkout", "mvp"]
+
+environment:
+  device: 0   # GPU ID o 'cpu'
+  seed: 42    # Semilla para reproducibilidad
+  workers: 4  # Num workers para DataLoader
+
+data_source:
+  dataset_yaml_path: "../../../../../datasets/ingeniia_services_smart_checkout_img_v1.0.0_training_20260120/split_data/data_augmentation/data.yaml"
+  img_size: 640
+
+model_config:
+  base_model: "yolo26s.pt" # Nombre del archivo base o ruta
+  task: "detect"
+
+training_params:
+  epochs: 100
+  batch_size: 32
+  patience: 15
+  optimizer: "auto" # SGD, Adam, AdamW, auto
+  lr0: 0.01         # Learning rate inicial
+  lrf: 0.01         # Learning rate final
+  cos_lr: False     # Cosine LR scheduler
+
+mlops_config:
+  tracking_uri: "sqlite:///mlflow.db"
+  experiment_name: "SmartCheckout_Detection_Experiments"
+  run_name: "01_YOLO26s_FullData_Augmented"
+  artifact_root: "runs/YOLO26"
