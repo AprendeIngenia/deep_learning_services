@@ -46,7 +46,7 @@ Cada servicio en este repositorio corresponde a un módulo práctico de nuestra 
       <b>🩻 X-Rays Evaluation (CNN + YOLO + GradCAM)</b><br/>
       <a href="python/xrays_evaluation/README.md">Ver código</a>
     </td>
-    <td align="center" width="33%">
+    <td align="center" width="50%">
       <a href="python/smart_checkout/README.md">
         <img src="assets/card-smart-checkout.png" alt="Smart Checkout Service" width="420">
       </a>
