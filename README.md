@@ -50,6 +50,7 @@ Cada servicio en este repositorio corresponde a un módulo práctico de nuestra 
       <a href="python/smart_checkout/README.md">
         <img src="assets/card-smart-checkout.png" alt="Smart Checkout Service" width="420">
       </a>
+      <br/>
       <b>🛒 Smart Checkout (YOLO + WebSockets)</b>
       <a href="python/smart_checkout/README.md">Ver código</a>
   </td>
