@@ -46,6 +46,13 @@ Cada servicio en este repositorio corresponde a un módulo práctico de nuestra 
       <b>🩻 X-Rays Evaluation (CNN + YOLO + GradCAM)</b><br/>
       <a href="python/xrays_evaluation/README.md">Ver código</a>
     </td>
+    <td align="center" width="33%">
+      <a href="python/smart_checkout/README.md">
+        <img src="assets/card-smart-checkout.png" alt="Smart Checkout Service" width="420">
+      </a>
+      <b>🛒 Smart Checkout (YOLO + WebSockets)</b>
+      <a href="python/smart_checkout/README.md">Ver código</a>
+  </td>
   </tr>
 </table>
 
@@ -55,7 +62,9 @@ Aquí tienes los enlaces directos a los datos que usamos en HuggingFace para ent
 | Servicio / Modelo         | Tipo de Red          | Dataset (HuggingFace) 💾                                         | Descripción                                                               |
 |---------------------------|----------------------|------------------------------------------------------------------|---------------------------------------------------------------------------|
 | Credit Scoring            | MLP (Perceptrón)     | [German Credit Risk](https://huggingface.co/datasets/inGeniia/german-credit-risk_credit-scoring_mlp)     | Predicción de puntajes crediticios basada en datos tabulares.            |
-| X-Rays Evaluation     | CNN (YOLO11-cls)     | [Chest X-Rays](https://huggingface.co/datasets/inGeniia/chest-xrays_xrays-evaluation_cnn-cls)           | Clasificación de imágenes de tórax para apoyo en diagnóstico médico.     |
+| X-Rays Evaluation     | CNN (YOLO11-cls)     | [Chest X-Rays](https://huggingface.co/datasets/inGeniia/chest-xrays-evaluation_cnn-cls)           | Clasificación de imágenes de tórax para apoyo en diagnóstico médico.     |
+| Smart Checkout     | CNN (YOLO26m)     | [Multiple Objects](https://huggingface.co/datasets/inGeniia/multiple-objects_smart-checkout_cnn-det)           | Detección de múltiples objetos en tiempo real simulando un cajero autónomo de supermercado.     |
+
 
 ¿Quieres verlos en acción? Ve a [www.ingeniia.co](https://www.ingeniia.co) e interactúa con estos modelos desplegados en tiempo real.
 
