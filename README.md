@@ -28,30 +28,30 @@ deep_learning_services/
 ## 🤖 Servicios Disponibles y Datasets
 Cada servicio en este repositorio corresponde a un módulo práctico de nuestra plataforma.
 
-<table>
+<table width="100%">
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="33%">
       <a href="python/credit_scoring/README.md">
-        <img src="assets/card-credit-scoring.png" alt="Credit Scoring Service" width="420">
+        <img src="assets/card-credit-scoring.png" alt="Credit Scoring Service" style="width:100%; max-width:420px; object-fit: cover;">
       </a>
-      <br/>
+      <br/><br/>
       <b>🪙 Credit Scoring (MLP)</b><br/>
       <a href="python/credit_scoring/README.md">Ver código</a>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="33%">
       <a href="python/xrays_evaluation/README.md">
-        <img src="assets/card-xrays-evaluation.png" alt="X-Rays Evaluation Service" width="420">
+        <img src="assets/card-xrays-evaluation.png" alt="X-Rays Evaluation Service" style="width:100%; max-width:420px; object-fit: cover;">
       </a>
-      <br/>
-      <b>🩻 X-Rays Evaluation (CNN + YOLO + GradCAM)</b><br/>
+      <br/><br/>
+      <b>🩻 X-Rays (CNN + GradCAM)</b><br/>
       <a href="python/xrays_evaluation/README.md">Ver código</a>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="33%">
       <a href="python/smart_checkout/README.md">
-        <img src="assets/card-smart-checkout.png" alt="Smart Checkout Service" width="420">
+        <img src="assets/card-smart-checkout.png" alt="Smart Checkout Service" style="width:100%; max-width:420px; object-fit: cover;">
       </a>
-      <br/>
-      <b>🛒 Smart Checkout (YOLO + WebSockets)</b><br/>
+      <br/><br/>
+      <b>🛒 Smart Checkout (YOLO)</b><br/>
       <a href="python/smart_checkout/README.md">Ver código</a>
     </td>
   </tr>
