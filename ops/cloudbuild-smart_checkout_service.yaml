@@ -1,0 +1,41 @@
+steps:
+# Paso 1: Construir la imagen Docker
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/smart-checkout-service:${SHORT_SHA}', '--file=container-images/smart_checkout_service/Dockerfile', '.']
+
+# Paso 2: Enviar (push) la imagen
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/smart-checkout-service:${SHORT_SHA}']
+
+# Paso 3: Desplegar en Cloud Run con soporte GPU (NVIDIA L4)
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'run'
+    - 'deploy'
+    - 'smart-checkout-service'
+    - '--image=us-central1-docker.pkg.dev/${PROJECT_ID}/ingeniia-services/smart-checkout-service:${SHORT_SHA}'
+    - '--service-account=smart-checkout-sa@${PROJECT_ID}.iam.gserviceaccount.com'
+    - '--port=8080'
+    - '--region=us-east4'         # Las GPUs L4 están disponibles aquí
+    - '--no-gpu-zonal-redundancy'
+    - '--allow-unauthenticated'   # Acceso público (controlado luego por tu API Gateway)
+
+
+    # --- CONFIGURACIÓN CRÍTICA PARA GPU Y WEBSOCKETS ---
+    - '--gpu=1'                   # Solicita 1 GPU
+    - '--gpu-type=nvidia-l4'      # Modelo específico soportado por Cloud Run
+    - '--cpu=4'                   # 4 vCPUs para no hacer cuello de botella a la GPU
+    - '--memory=16Gi'             # PyTorch + CUDA cache + WebSockets necesitan RAM
+    - '--max-instances=2'         # Numero maximo de contenedores: 1 contenedor encendidos
+    - '--min-instances=0'         # Numero minimo de contenedores: 0 contenedores encendidos.
+    - '--concurrency=20'          # Conexiones WS simultáneas por contenedor
+    - '--timeout=600'             # Los WebSockets necesitan timeouts largos (10 minutos)
+
+    # Entorno y Configuración de Ultralytics/PyTorch
+    - '--set-env-vars=SC_DEVICE=cuda:0,PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,YOLO_CONFIG_DIR=/tmp/Ultralytics'
+
+options:
+  machineType: 'E2_HIGHCPU_8' # Builder más grande porque la imagen CUDA es pesada de compilar
+  diskSizeGb: 100             # Necesitamos más disco para extraer las capas de CUDA
+  logging: CLOUD_LOGGING_ONLY
