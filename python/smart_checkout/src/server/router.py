@@ -1,10 +1,10 @@
 import asyncio
 import logging as log
 
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Request
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from starlette.websockets import WebSocketState
 
-from config.settings import settings
+from config.service.settings import settings
 from src.server.protocol import unpack_message
 
 router = APIRouter()

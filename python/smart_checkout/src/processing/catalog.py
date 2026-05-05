@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Dict, Any
 
 from src.server.schemas import ProductInfo
-from config.settings import settings
+from config.service.settings import settings
 
 log.basicConfig(level=log.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 

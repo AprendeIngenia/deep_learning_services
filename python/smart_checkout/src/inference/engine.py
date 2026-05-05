@@ -6,7 +6,7 @@ import numpy as np
 from pathlib import Path
 from ultralytics import YOLO
 
-from config.settings import settings
+from config.service.settings import settings
 from src.server.schemas import Detection, CheckoutResponse
 from src.processing.catalog import ProductCatalog
 

@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
-from config.settings import settings
+from config.service.settings import settings
 from src.inference.engine import ObjectDetector
 from src.server.router import router as ws_router
 

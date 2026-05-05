@@ -1,4 +1,10 @@
-# train
-src/training/train/mldlow.db
-mlruns
-mlflow.db
+# Smart checkout local outputs
+python/smart_checkout/runs/
+python/smart_checkout/reports/
+
+# MLflow local centralizado
+.mlflow/mlflow.db
+.mlflow/mlflow.db-shm
+.mlflow/mlflow.db-wal
+.mlflow/mlflow.db-journal
+.mlflow/artifacts/

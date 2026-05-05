@@ -1,0 +1,57 @@
+version: 1.0.0
+
+project_info:
+  service_name: "smart_checkout"
+  workflow_type: "training"
+  experiment_id: "EXP_001"
+  stage: "training"
+  description: "Entrenamiento YOLO26s para detección de productos en Smart Checkout."
+  tags:
+    - smart_checkout
+    - detection
+    - yolo26
+    - retail
+    - object_detection
+    - mvp
+
+environment:
+  device: 0
+  seed: 42
+  workers: 4
+
+data_source:
+  dataset_name: "smart_checkout_img"
+  dataset_version: "v1.0.0"
+  dataset_yaml_path: "../../datasets/ingeniia_services_smart_checkout_img_v1.0.0_training_20260120/split_data/data_augmentation/data.yaml"
+  img_size: 640
+
+model_config:
+  base_model: "yolo26s.pt"
+  model_name: "yolo26s"
+  model_family: "YOLO26sDetect"
+  task: "detect"
+
+training_params:
+  epochs: 100
+  batch_size: 32
+  patience: 15
+  optimizer: "auto"
+  lr0: 0.01
+  lrf: 0.01
+  cos_lr: false
+  close_mosaic: 10
+  cache: false
+  amp: true
+  plots: true
+
+validation_config:
+  split: "test"
+
+mlops_config:
+  tracking_uri: "http://127.0.0.1:5000"
+  experiment_name: "ingeniia_services/smart_checkout/training"
+  run_name: "EXP_001-smart_checkout-YOLO26sDetect-smart_checkout_img_v100-training"
+  artifact_root: ".mlflow/artifacts"
+  local_runs_dir: "reports/runs/YOLO/yolo26s-detect"
+
+benchmark_specific: "N/A"

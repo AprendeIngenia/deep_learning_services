@@ -92,18 +92,17 @@ class CreditRiskPredictor:
 
 BEST_MODEL_CONFIG = {
     'num_features': 26, 
-    'hidden_layers': [256, 128, 64, 64],
+    'hidden_layers': [128, 64, 64],
     'dropout_rate': 0.1,
     'use_batch_norm': True,
     'activation_fn': 'ReLU'
 }
 
 # Paths relativos al root del proyecto `python/credit_scoring`
-MODEL_PATH = Path("models/genia_services_mlp_credit_scoring_model_v1.3.0_20250824.pt")
+MODEL_PATH = Path("models/02_ingeniia_services_mlp_credit_scoring_model_v1.0.0_20250824.pt")
 PREPROCESSOR_PATH = Path("models/german_credit_risk_preprocessor.joblib")
 
 # Instancia única (Singleton) del predictor para ser usada por la API.
-# Esto asegura que el modelo se carga una sola vez al iniciar el servidor.
 predictor_instance = CreditRiskPredictor(
     model_path=MODEL_PATH,
     preprocessor_path=PREPROCESSOR_PATH,

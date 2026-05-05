@@ -1,0 +1,100 @@
+{
+  "dataset_yaml_path": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\data_augmentation\\data.yaml",
+  "dataset_root": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\data_augmentation",
+  "classes": {
+    "0": "caja cereal",
+    "1": "cepillo dental",
+    "2": "gafas",
+    "3": "gorra",
+    "4": "manzana roja",
+    "5": "papel higienico",
+    "6": "soda",
+    "7": "zanahoria"
+  },
+  "splits": {
+    "train": {
+      "image_dirs": [
+        "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\train\\images"
+      ],
+      "images_total": 0,
+      "labels": [
+        {
+          "images_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\train\\images",
+          "images_count": 0,
+          "labels_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\train\\labels",
+          "label_files": 0,
+          "instances_total": 0,
+          "instances_by_class": {
+            "caja cereal": 0,
+            "cepillo dental": 0,
+            "gafas": 0,
+            "gorra": 0,
+            "manzana roja": 0,
+            "papel higienico": 0,
+            "soda": 0,
+            "zanahoria": 0
+          },
+          "empty_label_files": 0,
+          "invalid_rows": 0,
+          "warning": "labels_dir_not_found"
+        }
+      ]
+    },
+    "val": {
+      "image_dirs": [
+        "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\val\\images"
+      ],
+      "images_total": 0,
+      "labels": [
+        {
+          "images_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\val\\images",
+          "images_count": 0,
+          "labels_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\val\\labels",
+          "label_files": 0,
+          "instances_total": 0,
+          "instances_by_class": {
+            "caja cereal": 0,
+            "cepillo dental": 0,
+            "gafas": 0,
+            "gorra": 0,
+            "manzana roja": 0,
+            "papel higienico": 0,
+            "soda": 0,
+            "zanahoria": 0
+          },
+          "empty_label_files": 0,
+          "invalid_rows": 0,
+          "warning": "labels_dir_not_found"
+        }
+      ]
+    },
+    "test": {
+      "image_dirs": [
+        "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\test\\images"
+      ],
+      "images_total": 0,
+      "labels": [
+        {
+          "images_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\test\\images",
+          "images_count": 0,
+          "labels_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_smart_checkout_img_v1.0.0_training_20260120\\split_data\\test\\labels",
+          "label_files": 0,
+          "instances_total": 0,
+          "instances_by_class": {
+            "caja cereal": 0,
+            "cepillo dental": 0,
+            "gafas": 0,
+            "gorra": 0,
+            "manzana roja": 0,
+            "papel higienico": 0,
+            "soda": 0,
+            "zanahoria": 0
+          },
+          "empty_label_files": 0,
+          "invalid_rows": 0,
+          "warning": "labels_dir_not_found"
+        }
+      ]
+    }
+  }
+}

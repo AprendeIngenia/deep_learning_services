@@ -1,0 +1,29 @@
+{
+  "dataset_path": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_xrays_evaluation_img_v1.0.0_training_20251121\\split_data",
+  "splits": {
+    "train": {
+      "split_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_xrays_evaluation_img_v1.0.0_training_20251121\\split_data\\train",
+      "total_images": 18843,
+      "classes": {
+        "anomaly": 8952,
+        "normal": 9891
+      }
+    },
+    "valid": {
+      "split_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_xrays_evaluation_img_v1.0.0_training_20251121\\split_data\\valid",
+      "total_images": 1796,
+      "classes": {
+        "anomaly": 840,
+        "normal": 956
+      }
+    },
+    "test": {
+      "split_dir": "C:\\Users\\santi\\Desktop\\proyectos\\ingeniia_services\\datasets\\ingeniia_services_xrays_evaluation_img_v1.0.0_training_20251121\\split_data\\test",
+      "total_images": 900,
+      "classes": {
+        "anomaly": 421,
+        "normal": 479
+      }
+    }
+  }
+}

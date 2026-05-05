@@ -1,0 +1,56 @@
+version: 1.0.0
+
+project_info:
+  service_name: "xrays_evaluation"
+  workflow_type: "training"
+  experiment_id: "EXP_002"
+  stage: "training"
+  description: "Entrenamiento YOLO11m-cls para clasificación de radiografías de tórax."
+  tags:
+    - xrays_evaluation
+    - yolo11
+    - classification
+    - cnn
+    - medical_imaging
+    - medium_model
+
+environment:
+  device: 0
+  seed: 42
+  workers: 4
+
+data_source:
+  dataset_name: "xrays_evaluation_img"
+  dataset_version: "v1.0.0"
+  dataset_path: "../../datasets/ingeniia_services_xrays_evaluation_img_v1.0.0_training_20251121/split_data"
+  img_size: 224
+
+model_config:
+  base_model_path: "src/training/pretrained_models/yolo11m-cls.pt"
+  model_name: "yolo11m-cls"
+  model_family: "YOLO11mCLS"
+  task: "classify"
+
+training_params:
+  epochs: 50
+  batch_size: 64
+  patience: 5
+  optimizer: "auto"
+  lr0: 0.01
+  lrf: 0.01
+  cos_lr: false
+  cache: false
+  amp: true
+  plots: true
+
+validation_config:
+  split: "test"
+
+mlops_config:
+  tracking_uri: "http://127.0.0.1:5000"
+  experiment_name: "ingeniia_services/xrays_evaluation/training"
+  run_name: "EXP_002-xrays_evaluation-YOLO11mCLS-xrays_evaluation_img_v100-training"
+  artifact_root: ".mlflow/artifacts"
+  local_runs_dir: "runs/YOLO/yolo11m-cls"
+
+benchmark_specific: "N/A"

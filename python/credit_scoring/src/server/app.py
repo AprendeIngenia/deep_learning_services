@@ -45,7 +45,7 @@ async def root():
 
 @app.post("/mlp_demo", 
           response_model=CreditRiskOutput,
-          tags=["Predicciones"],
+          tags=["Predicciones MLP"],
           summary="Realiza una predicción de riesgo crediticio")
 
 async def predict_credit_risk(request: CreditRiskInput) -> CreditRiskOutput:
@@ -65,7 +65,7 @@ async def predict_credit_risk(request: CreditRiskInput) -> CreditRiskOutput:
             status_code=500, 
             detail=f"Ocurrió un error interno al procesar la solicitud: {e}"
         )
-        
+
 
 """
 local execute:

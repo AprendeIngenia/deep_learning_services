@@ -213,7 +213,7 @@ if __name__ == '__main__':
 """
 usage:
 # move to ingeniia_services
-dvc pull datasets/ingeniia_services_xrays_evaluation_img_v1.0.0_test_20251121.dvc
+dvc pull -r ingeniia_services_storage datasets/ingeniia_services_xrays_evaluation_img_v1.0.0_test_20251130
 python tests/benchmark_models.py
 
 visualize:
